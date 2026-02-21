@@ -6,16 +6,29 @@ A modern C++23 Qt6 application for tracking and visualizing software dependencie
 
 - **Multi-Format Support**: Load CycloneDX (JSON), SPDX (Tag-Value), and custom DepDiscover files via a file dialog.
 - **Enhanced Dependency Table**:
-    - **Sortable Columns**: Sort by Name, Version, Fixed Version, License, Criticality, or CVE Count.
-    - **Color-Coding**: Rows are color-coded based on the highest CVE criticality (Critical, High, Medium, Low, None/Unknown).
-    - **Interactive Criticality**: Click on the "Criticality" cell to open the NVD/OSV detail page for the most severe vulnerability.
-    - **CVE Details**: Click on "CVE Count" to see a full list of vulnerabilities for that dependency.
-    - **Fixed Version Detection**: Automatically identifies the version where vulnerabilities are fixed (if available in the source file).
+  - **Sortable Columns**: Sort by Name, Version, Fixed Version, License, Criticality, or CVE Count.
+  - **Color-Coding**: Rows are color-coded based on the highest CVE criticality (Critical, High, Medium, Low, None/Unknown).
+  - **Interactive Criticality**: Click on the "Criticality" cell to open the NVD/OSV detail page for the most severe vulnerability.
+  - **CVE Details**: Click on "CVE Count" to see a full list of vulnerabilities for that dependency.
+  - **Fixed Version Detection**: Automatically identifies the version where vulnerabilities are fixed (if available in the source file).
 - **Comprehensive Statistics**:
-    - **Vulnerability Distribution**: Pie chart showing the breakdown of components by their maximum criticality.
-    - **License Distribution**: Visualization of different licenses used across all project dependencies.
+  - **Vulnerability Distribution**: Pie chart showing the breakdown of components by their maximum criticality.
+  - **License Distribution**: Visualization of different licenses used across all project dependencies.
 - **GitHub Update Checker**: Automatically checks for new versions of this application on GitHub at startup.
 - **Modern C++23**: Leverages C++23 standards, including `std::expected`, `std::filesystem`, and modern syntax.
+
+## Screenshots
+
+![overview](docs/img/01.png)
+
+![cve details](docs/img/02.png)
+
+![charts](docs/img/03.png)
+
+**see also**:
+
+- [Architecture Document](docs/architecture/architecture.md)
+- [depdiscover](https://github.com/Zheng-Bote/depdiscover)
 
 ## Architecture
 
