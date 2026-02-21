@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Architecture: Qt Dependency Tracker UI](#architecture-qt-dependency-tracker-ui)
+  - [Component Overview](#component-overview)
+  - [Class Diagram](#class-diagram)
+  - [Component Diagram](#component-diagram)
+  - [Sequence Diagram: Program Start & Update Check](#sequence-diagram-program-start--update-check)
+  - [Sequence Diagram: Data Interaction](#sequence-diagram-data-interaction)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Architecture: Qt Dependency Tracker UI
 
 This project follows a Model-View-Controller (MVC) like architecture to ensure separation of concerns, scalability, and maintainability.
