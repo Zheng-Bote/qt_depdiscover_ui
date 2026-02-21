@@ -2,6 +2,15 @@
 
 A modern C++23 Qt6 application for tracking and visualizing software dependencies and their vulnerabilities.
 
+---
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+---
+
 ## Features
 
 - **Multi-Format Support**: Load CycloneDX (JSON), SPDX (Tag-Value), and custom DepDiscover files via a file dialog.
