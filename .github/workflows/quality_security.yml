@@ -83,18 +83,18 @@ jobs:
             echo "compile_commands.json not found, will use direct file paths"
           fi
 
-      - name: Filter compile_commands.json (only project files, skip _deps)
+      - name: Filter compile_commands.json (only project files, skip _deps and _autogen)
         run: |
           echo "=== Filtering compile_commands.json ==="
 
           if [ -f compile_commands.json ]; then
-            # Filter out _deps and keep only cli/, include/, tests/
-            jq '[.[] | select(.file | contains("_deps") | not)]' compile_commands.json > compile_commands_filtered.json
+            # Filter out _deps and _autogen
+            jq '[.[] | select((.file | contains("_deps") | not) and (.file | contains("_autogen") | not))]' compile_commands.json > compile_commands_filtered.json
             
             echo "=== Original entries ==="
             jq 'length' compile_commands.json
             
-            echo "=== Filtered entries (excluding _deps) ==="
+            echo "=== Filtered entries (excluding _deps and _autogen) ==="
             jq 'length' compile_commands_filtered.json
             
             echo "=== Files to analyze ==="
@@ -176,6 +176,13 @@ jobs:
             -DCMAKE_CXX_STANDARD=23
           cp build-clangtidy/compile_commands.json .
 
+      - name: Filter compile_commands.json (only project files, skip _deps and _autogen)
+        run: |
+          if [ -f compile_commands.json ]; then
+            jq '[.[] | select((.file | contains("_deps") | not) and (.file | contains("_autogen") | not))]' compile_commands.json > compile_commands_filtered.json
+            mv compile_commands_filtered.json compile_commands.json
+          fi
+
       - name: Debug - Check compile_commands.json
         run: |
           echo "=== compile_commands.json exists ==="
@@ -191,7 +198,7 @@ jobs:
           echo "=== Starting Clang-Tidy Analysis ==="
 
           # Get list of source files from compile_commands.json
-          FILES=$(jq -r '.[].file' build-clangtidy/compile_commands.json 2>/dev/null | sort -u)
+          FILES=$(jq -r '.[].file' compile_commands.json 2>/dev/null | sort -u)
 
           if [ -z "$FILES" ]; then
             echo "ERROR: No files found in compile_commands.json"
