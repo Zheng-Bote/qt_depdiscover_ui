@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28)
 project(QtDependencyTrackerUI 
-    VERSION 0.2.0
+    VERSION 1.0.0
     DESCRIPTION "Depdiscover Dashboard"
     HOMEPAGE_URL "https://github.com/Zheng-Bote/qt_depdiscover_ui"
     LANGUAGES CXX)
