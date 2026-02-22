@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.28)
 project(QtDependencyTrackerUI 
-    VERSION 0.1.0
+    VERSION 0.2.0
     DESCRIPTION "Depdiscover Dashboard"
     HOMEPAGE_URL "https://github.com/Zheng-Bote/qt_depdiscover_ui"
     LANGUAGES CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -59,3 +60,28 @@ if(MSVC)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
 endif()
+
+# --- 4. Installation ---
+include(GNUInstallDirs)
+install(TARGETS QtDependencyTrackerUI
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+# Install icon and desktop file
+install(FILES resources/app_icon.png DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/256x256/apps/ RENAME QtDependencyTrackerUI.png)
+install(FILES resources/QtDependencyTrackerUI.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/)
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+# --- 5. Custom Generators (Original Code) ---
+
+# CMake File API Query (Datei erzeugen)
+set(QUERY_DIR "${CMAKE_BINARY_DIR}/.cmake/api/v1/query/client-project")
+file(MAKE_DIRECTORY "${QUERY_DIR}")
+file(WRITE "${QUERY_DIR}/codemodel-v2" "") 
+
+# libs.txt Generierung (Timing-sicher via GENERATE)
+file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/libs.txt" 
+     CONTENT "$<TARGET_PROPERTY:QtDependencyTrackerUI,LINK_LIBRARIES>")

@@ -21,9 +21,9 @@ constexpr std::string_view PROJECT_DESCRIPTION = "Depdiscover Dashboard";
 
 constexpr std::string_view EXECUTABLE_NAME = "QtDependencyTrackerUI";
 
-constexpr std::string_view VERSION = "0.1.0";
+constexpr std::string_view VERSION = "0.2.0";
 constexpr std::int32_t PROJECT_VERSION_MAJOR { 0 };
-constexpr std::int32_t PROJECT_VERSION_MINOR { 1 };
+constexpr std::int32_t PROJECT_VERSION_MINOR { 2 };
 constexpr std::int32_t PROJECT_VERSION_PATCH { 0 };
 
 constexpr std::string_view PROJECT_HOMEPAGE_URL = "https://github.com/Zheng-Bote/qt_depdiscover_ui";

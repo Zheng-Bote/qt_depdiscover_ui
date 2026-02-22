@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=QtDependencyTrackerUI
+GenericName=Dependency Scanner
+Comment=Native C++ Dependency Scanner & SBOM Generator
+Exec=QtDependencyTrackerUI
+Icon=QtDependencyTrackerUI
+Terminal=false
+Categories=Development;Engineering;
+Keywords=cpp;dependency;scanner;sbom;cve;license;
+StartupNotify=true
+MimeType=application/json;

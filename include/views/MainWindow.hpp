@@ -7,8 +7,8 @@
  *
  * @file MainWindow.hpp
  * @brief Main GUI component for the application.
- * @version 0.1.0
- * @date 2026-02-21
+ * @version 0.2.0
+ * @date 2026-02-22
  *
  * @author ZHENG Robert (robert@hase-zheng.net)
  * @copyright Copyright (c) 2026 ZHENG Robert
@@ -23,11 +23,15 @@
 #include "../utils/DepDiscoverParser.hpp"
 #include "../utils/SPDXParser.hpp"
 #include "DependencyTableModel.hpp"
+#include <QDateTime> // NEU: Für Zeitstempel beim Export
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QFutureWatcher>
 #include <QHBoxLayout>
 #include <QHeaderView>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QLabel>
 #include <QMainWindow>
 #include <QMessageBox>
@@ -62,9 +66,22 @@ public:
     auto *layout = new QVBoxLayout(central_widget);
     setCentralWidget(central_widget);
 
+    // --- NEU: Horizontales Layout für die Top-Buttons ---
+    auto *top_button_layout = new QHBoxLayout();
+
     auto *open_button = new QPushButton("Open Dependency File", this);
     connect(open_button, &QPushButton::clicked, this, &MainWindow::onOpenFile);
-    layout->addWidget(open_button);
+    top_button_layout->addWidget(open_button);
+
+    m_export_button = new QPushButton("Export CycloneDX SBOM", this);
+    m_export_button->setEnabled(false); // Erst aktiv, wenn Daten geladen sind
+    connect(m_export_button, &QPushButton::clicked, this,
+            &MainWindow::onExportCycloneDX);
+    top_button_layout->addWidget(m_export_button);
+
+    top_button_layout->addStretch(); // Drückt die Buttons nach links
+    layout->addLayout(top_button_layout);
+    // ----------------------------------------------------
 
     m_tab_widget = new QTabWidget(this);
     layout->addWidget(m_tab_widget);
@@ -227,7 +244,141 @@ private slots:
 
     m_model->setDependencies(std::move(result.value()));
     updateStatistics();
+
+    // NEU: Export Button freischalten, da jetzt Daten vorliegen
+    m_export_button->setEnabled(true);
   }
+
+  // --- NEU: Export Logik ---
+  void onExportCycloneDX() {
+    QString file_path = QFileDialog::getSaveFileName(
+        this, "Export CycloneDX SBOM", "cyclonedx.sbom.json",
+        "CycloneDX JSON (*.json);;All Files (*)");
+
+    if (file_path.isEmpty())
+      return;
+
+    QJsonObject root;
+    root["bomFormat"] = "CycloneDX";
+    root["specVersion"] = "1.4";
+    root["version"] = 1;
+
+    // Metadata
+    QJsonObject metadata;
+    metadata["timestamp"] =
+        QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
+
+    QJsonObject tool;
+    tool["vendor"] = QString::fromStdString(rz::config::AUTHOR.data());
+    tool["name"] = QString::fromStdString(rz::config::PROJECT_NAME.data());
+    tool["version"] = QString::fromStdString(rz::config::VERSION.data());
+
+    QJsonArray tools;
+    tools.append(tool);
+    metadata["tools"] = tools;
+    root["metadata"] = metadata;
+
+    QJsonArray components;
+    QJsonArray vulnerabilities;
+
+    // Iterate über die geladenen Dependencies im Model
+    for (const auto &dep : m_model->dependencies()) {
+      QJsonObject comp;
+      QString purl = QString("pkg:generic/%1@%2")
+                         .arg(QString::fromStdString(dep.name))
+                         .arg(QString::fromStdString(
+                             dep.version.empty() ? "unknown" : dep.version));
+
+      comp["type"] = "library";
+      comp["name"] = QString::fromStdString(dep.name);
+      comp["version"] =
+          QString::fromStdString(dep.version.empty() ? "unknown" : dep.version);
+      comp["bom-ref"] = purl;
+      comp["purl"] = purl;
+
+      // Lizenz einfügen
+      if (!dep.license.empty() && dep.license != "Unknown") {
+        QJsonArray licenses;
+        QJsonObject licObj;
+        QJsonObject licDetail;
+        licDetail["id"] = QString::fromStdString(dep.license);
+        licObj["license"] = licDetail;
+        licenses.append(licObj);
+        comp["licenses"] = licenses;
+      }
+
+      components.append(comp);
+
+      // CVEs verarbeiten
+      for (const auto &cve : dep.cves) {
+        if (cve.id == "SAFE" || cve.id == "NOT-CHECKED" ||
+            cve.id == "CHECK-ERROR")
+          continue;
+
+        QJsonObject vuln;
+        vuln["bom-ref"] = purl; // Verknüpft CVE mit der Komponente
+        vuln["id"] = QString::fromStdString(cve.id);
+
+        QJsonObject source;
+        source["name"] = "OSV.dev";
+        vuln["source"] = source;
+
+        if (!cve.description.empty()) {
+          vuln["description"] = QString::fromStdString(cve.description);
+        }
+
+        // Score und Rating
+        QJsonArray ratings;
+        QJsonObject rating;
+        rating["score"] = cve.cvss_score;
+
+        QString sev_str = "unknown";
+        switch (cve.criticality) {
+        case models::Criticality::CRITICAL:
+          sev_str = "critical";
+          break;
+        case models::Criticality::HIGH:
+          sev_str = "high";
+          break;
+        case models::Criticality::MEDIUM:
+          sev_str = "medium";
+          break;
+        case models::Criticality::LOW:
+          sev_str = "low";
+          break;
+        default:
+          sev_str = "unknown";
+          break;
+        }
+
+        rating["severity"] = sev_str;
+        ratings.append(rating);
+        vuln["ratings"] = ratings;
+
+        vulnerabilities.append(vuln);
+      }
+    }
+
+    root["components"] = components;
+    if (!vulnerabilities.isEmpty()) {
+      root["vulnerabilities"] = vulnerabilities;
+    }
+
+    // JSON schreiben
+    QJsonDocument doc(root);
+    QFile file(file_path);
+    if (file.open(QIODevice::WriteOnly)) {
+      file.write(doc.toJson(QJsonDocument::Indented));
+      file.close();
+      QMessageBox::information(this, "Export Successful",
+                               "CycloneDX SBOM exported successfully to:\n" +
+                                   file_path);
+    } else {
+      QMessageBox::critical(this, "Export Failed",
+                            "Could not write to file:\n" + file_path);
+    }
+  }
+  // ------------------------------
 
   void updateStatistics() {
     auto *cve_series = new QPieSeries();
@@ -301,6 +452,8 @@ private:
     m_update_watcher.setFuture(future);
   }
 
+  QPushButton *m_export_button; // NEU: Member für den Export-Button, um Status
+                                // zu steuern
   QTabWidget *m_tab_widget;
   QTableView *m_table_view;
   DependencyTableModel *m_model;
