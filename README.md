@@ -12,21 +12,19 @@ A modern C++23 Qt6 application for tracking, visualizing, and exporting software
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 **Table of Contents**
 
-- [Qt Dependency Tracker UI](#qt-dependency-tracker-ui)
-  - [Description](#description)
-  - [🚀 Features](#-features)
-  - [📸 Screenshots](#-screenshots)
-  - [🏗 Architecture](#-architecture)
-  - [🏗 Build Instructions](#-build-instructions)
-    - [Prerequisites](#prerequisites)
-    - [Steps](#steps)
-  - [📚 Usage](#-usage)
-  - [📜 License](#-license)
-  - [📝 Author](#-author)
-  - [📝 Code Contributors](#-code-contributors)
+- [Description](#description)
+- [🚀 Features](#-features)
+- [📸 Screenshots](#-screenshots)
+- [🏗 Architecture](#-architecture)
+- [🏗 Build Instructions](#-build-instructions)
+  - [Prerequisites](#prerequisites)
+  - [Steps](#steps)
+- [📚 Usage](#-usage)
+- [📜 License](#-license)
+- [📝 Author](#-author)
+- [📝 Code Contributors](#-code-contributors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
