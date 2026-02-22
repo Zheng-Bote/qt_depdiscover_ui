@@ -24,19 +24,23 @@ This project follows a Model-View-Controller (MVC) like architecture to ensure s
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 **Table of Contents**
 
-- [Architecture: Qt Dependency Tracker UI](#architecture-qt-dependency-tracker-ui)
-  - [Component Overview](#component-overview)
-  - [Class Diagram](#class-diagram)
-  - [Component Diagram](#component-diagram)
-  - [Sequence Diagram: Program Start \& Update Check](#sequence-diagram-program-start--update-check)
-  - [Sequence Diagram: Data Interaction](#sequence-diagram-data-interaction)
-  - [Use Case Diagram](#use-case-diagram)
-  - [Activity Diagram: User Workflow](#activity-diagram-user-workflow)
-  - [State Machine Diagram](#state-machine-diagram)
-  - [Deployment Diagram](#deployment-diagram)
+- [Component Overview](#component-overview)
+- [Class Diagram](#class-diagram)
+- [Component Diagram](#component-diagram)
+- [Sequence Diagram: Program Start & Update Check](#sequence-diagram-program-start--update-check)
+- [Sequence Diagram: Data Interaction](#sequence-diagram-data-interaction)
+- [Use Case Diagram](#use-case-diagram)
+- [Activity Diagram: User Workflow](#activity-diagram-user-workflow)
+- [State Machine Diagram](#state-machine-diagram)
+- [Deployment Diagram](#deployment-diagram)
+- [Object Diagram](#object-diagram)
+- [Package Diagram](#package-diagram)
+- [Timing Diagram: Update Check](#timing-diagram-update-check)
+- [Communication Diagram: Open File](#communication-diagram-open-file)
+- [Interaction Overview Diagram](#interaction-overview-diagram)
+- [Profile Diagram (UML Extension)](#profile-diagram-uml-extension)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
