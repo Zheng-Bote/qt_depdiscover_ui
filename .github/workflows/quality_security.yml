@@ -26,13 +26,14 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget pipx cmake ninja-build build-essential gcc-14 g++-14 libssl-dev libqt6charts6 nlohmann-json3-dev
+          sudo apt-get install -y wget pipx cmake ninja-build build-essential gcc-14 g++-14 libssl-dev nlohmann-json3-dev
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: "6.9.*"
           host: "linux"
+          modules: "qtcharts"
 
       - name: Build with CMake
         run: |
@@ -55,13 +56,14 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget pipx cmake ninja-build build-essential gcc-14 g++-14 libssl-dev libqt6charts6 nlohmann-json3-dev
+          sudo apt-get install -y wget pipx cmake ninja-build build-essential gcc-14 g++-14 libssl-dev nlohmann-json3-dev
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: "6.9.*"
           host: "linux"
+          modules: "qtcharts"
 
       - name: Configure CMake (generate compile_commands.json)
         run: |
@@ -158,13 +160,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang clang-tidy \
           wget pipx cmake ninja-build build-essential \
-          gcc-14 g++-14 libssl-dev libqt6charts6 nlohmann-json3-dev
+          gcc-14 g++-14 libssl-dev nlohmann-json3-dev
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: "6.9.*"
           host: "linux"
+          modules: "qtcharts"
 
       - name: Configure CMake (export compile_commands.json)
         run: |
@@ -241,13 +244,14 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget pipx cmake ninja-build build-essential gcc-14 g++-14 libssl-dev libqt6charts6 nlohmann-json3-dev
+          sudo apt-get install -y wget pipx cmake ninja-build build-essential gcc-14 g++-14 libssl-dev nlohmann-json3-dev
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: "6.9.*"
           host: "linux"
+          modules: "qtcharts"
 
       - name: Configure CMake (export compile_commands)
         run: |
